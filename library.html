@@ -1,0 +1,2825 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>gun or run</title>
+        <meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="mobile-web-app-capable" content="yes">
+        <script src="https://aframe.io/releases/1.0.0/aframe.min.js"></script>
+        <!-- <script src="script/vendor/aframe-extras.js"></script> -->
+        <style>
+span.close {
+    color: white;
+    font-size: 20px;
+    font-family: arial;
+    font-weight: 900;
+    display: inline-block;
+    margin-left: auto;
+    padding-right: 7px;
+    border-radius: 5px;
+    border: 1px solid;
+    padding-left: 6px;
+    padding-bottom: 1px;
+    cursor: pointer;
+}
+
+button.a-enter-vr-button{
+    display: none;
+}
+
+.popupone {
+    height: 70vh;
+    width: 60vw;
+    background: #383838e8;
+    border-radius: 14px;
+    padding: 10px;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+}
+
+.popcont {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    z-index: 100000000;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+span.show {
+    text-align: center;
+    color: white;
+    position: absolute;
+    top: 50%;
+    transform: translatey(-50%);
+    font-size: 3vw;
+    max-width: 35%;
+}
+
+
+.arrowcont img {
+    width: 100%;
+    height: 100%;
+}
+
+.arrowcont {
+    position: absolute;
+    z-index: 1000;
+    width: 30vh;
+    left: 50px;
+    bottom: 50px;
+    height: 30vh;
+    display: none;
+    touch-action: none;
+}
+
+
+/**************************/
+
+.arrowcont.right {
+    right: 50px;
+    left: unset;
+}
+
+span.arrowc {
+    position: absolute;
+    background: black;
+    height:50%;
+    width: 50%;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -53%);
+}
+
+span.arrowc.hiddenarow, span.arrowc.hiddenarow1{
+    z-index: 10;
+    background: yellowgreen;
+}
+
+div#mobilecont {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background: beige;
+    top: 0;
+    z-index: 100000000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 5vw;
+}
+
+
+img{
+user-select: none;
+-moz-user-select: none;
+-webkit-user-drag: none;
+-webkit-user-select: none;
+-ms-user-select: none;
+}
+
+.show {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    color: white;
+}
+
+p.tablepdf {
+    display: none;
+}
+
+span.tableadd {
+    background: black;
+    width: max-content;
+    margin: auto;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#pdf {
+    width: 100%;
+    max-height: 100%;
+}
+
+div#tvcont .show {
+    overflow-y: scroll;
+    height: 100%;
+    width: 100%;
+    padding-top: 45px;
+    box-sizing: border-box;
+}
+
+div#tvcont li {
+    font-size: 34px;
+    max-height: 100%;
+    cursor: pointer;
+}
+
+.gamecount{
+    position: fixed;
+    z-index: 1000;
+    top:0;
+    right: 0;
+    padding: 10px;
+    color:blue;
+    display: none;
+    background-color: red;
+}
+
+
+iframe body{
+display:none
+}
+</style>
+    </head>
+
+    <body>
+        <a-scene id="scene">
+
+            <a-assets>
+                <img id="ground" src="green.jpg">
+                <img id="street" src="street2.jpg">
+                <img id="sky" src="sky.jpg">
+                <video id="myvideo" loop="true"  src="1.mp4"></video>
+            </a-assets>
+
+            <a-entity movement-controls="speed: 0.15">
+                <a-entity position="0 0 0" rotation="0 0 0" id="thecam">
+                    <a-entity camera="active:true" look-controls = "pointerLockEnabled:true" id="thecamo" wasd-controls="acceleration: 300;" position="0 1.9 0" rotation="0 0 0">
+                        <a-entity id="cursor" cursor="click:true;" position="0 0 -0.5" geometry="primitive:sphere; radius:0.005" material="color: darkred; shader:flat; opacity:1" raycaster="object: .book"></a-entity>
+                    </a-entity>
+                    <a-entity camera="active:false"  id="thecamo2" position="0 2.2 1.5" rotation="-15 180 0"> </a-entity>
+                </a-entity>  
+            </a-entity>
+
+
+            <a-entity cursor-listener scale="1 1 1" position="0 7.1 -11" rotation="0 0 0">
+                <a-box color="orange" width="0.1" height="14" depth="50" side="double" material="shader:standard;" position="12.5 0 0" rotation="0 0 0" scale="1 1 1"></a-box>
+                <a-box color="orange" width="0.1" height="14" depth="50" side="double" material="shader:standard;" position="-12.5 0 0" rotation="0 0 0" scale="1 1 1"></a-box>
+                <a-box color="gray" width="25" height="14" depth="0.1" side="double" material="shader:standard;" position="0 0 25" rotation="0 0 0" scale="1 1 1"></a-box>
+                <a-box color="gray" width="25" height="0.1" depth="50" side="double" material="shader:standard;" position="0 7 0" rotation="0 0 0" scale="1 1 1"></a-box>
+                <a-box color="gray" width="25" height="0.1" depth="50" side="double" material="shader:standard;" position="0 -7 0" rotation="0 0 0" scale="1 1 1"></a-box>
+
+                <!-- <a-box color="gray" width="25" height="14" depth="50" side="double" material="shader:standard;" position="0 0 0" rotation="0 0 0" scale="1 1 1"></a-box> -->
+
+                <a-box color="green" width="25" height="4" depth="0.1" side="double" material="shader:standard;" position="0 5 0" rotation="0 0 0" scale="1 1 1"></a-box>
+                <a-box color=green width="9" height="10" depth="0.1" side="double" material="shader:standard;" position="-8 -2 0" rotation="0 0 0" scale="1 1 1"></a-box>
+                <a-box color=green width="11" height="10" depth="0.1" side="double" material="shader:standard;" position="7 -2 0" rotation="0 0 0" scale="1 1 1"></a-box>
+                <a-box color="red" class="door0" width="5" height="10" depth="0.1" side="double" material="shader:standard;" position="-1 -2 0" rotation="0 0 0" scale="1 1 1"></a-box>
+
+                <a-box color="green" width="25" height="4" depth="0.1" side="double" material="shader:standard;" position="0 5 -25" rotation="0 0 0" scale="1 1 1"></a-box>
+                <a-box color=green width="9" height="10" depth="0.1" side="double" material="shader:standard;" position="-8 -2 -25" rotation="0 0 0" scale="1 1 1"></a-box>
+                <a-box color=green width="11" height="10" depth="0.1" side="double" material="shader:standard;" position="7 -2 -25" rotation="0 0 0" scale="1 1 1"></a-box>
+                <a-box color="blue" class="door1" width="5" height="10" depth="0.1" side="double" material="shader:standard;" position="-1 -2 -25" rotation="0 0 0" scale="1 1 1"></a-box>
+             
+                <a-box color="green" width="24" height="0.1" depth="24" side="double" material="shader:standard;" position="0 -6.9 12.5" rotation="0 0 0" scale="1 1 1" geometry=""></a-box>    
+            </a-entity>
+            <a-entity class= "carcontainer">
+                <a-box id="thecar" color="blue" width="2" height="1" depth="4" side="double" material="shader:standard;" position="5 .7 -50" rotation="0 0 0" scale="1 1 1" geometry=""></a-box>            
+            </a-entity>
+
+            <a-entity class= "itemscontainer">
+                <a-box class="item" color="red" width="2" height="0.4" depth="4" side="double" material="shader:standard;" position="-10 0 -60" rotation="0 0 0" scale="1 1 1" geometry=""></a-box>            
+                <a-box class="item" color="red" width="2" height="0.4" depth="4" side="double" material="shader:standard;" position="0 0 -75" rotation="0 0 0" scale="1 1 1" geometry=""></a-box>            
+                <a-box class="item" color="red" width="2" height="0.4" depth="4" side="double" material="shader:standard;" position="10 0 -95" rotation="0 0 0" scale="1 1 1" geometry=""></a-box>            
+                <a-box class="item" color="red" width="2" height="0.4" depth="4" side="double" material="shader:standard;" position="-10 0 -110" rotation="0 0 0" scale="1 1 1" geometry=""></a-box>            
+                <a-box class="item" color="red" width="2" height="0.4" depth="4" side="double" material="shader:standard;" position="-0 0 -130" rotation="0 0 0" scale="1 1 1" geometry=""></a-box>            
+            </a-entity> 
+            
+            <a-entity id="libraryContainer">
+
+            </a-entity>
+
+            <a-video height="5" width="11" position="-12.3 6 -23.5" src="#myvideo" material="" rotation="0 90 0" id="tv">
+            </a-video>
+
+            <!-- info model -->
+            <a-box id="info" color="red" width="1" depth="1" side="double" material="color: #fff" position="-11.9 1.47316 -3.66414" rotation="" scale="" height="1" geometry="depth: 2; height: 2.5"></a-box>
+            <!-- info table -->
+            <a-box id="table" color="cyan" width="1" depth="1" side="double" position="-0.06736 0.7672 3.44606" rotation="" scale="" height="1" geometry="width: 3" material=""></a-box>
+            <!-- info book -->
+            <a-box id="tablebook" color="purple" height="0.05" depth="0.7" width="0.5" side="double" position="-0.06736 0.31917 3.44606" pdflink=""></a-box>
+
+            <a-entity rotation="0 150 0">
+                <a-sky src="#sky"
+                    radius="150"
+                    rotation="0 180 0"
+                    position="60 0 60"
+                    side="double">
+                </a-sky>
+
+                <a-plane 
+                    material="color:#a2a2a2;
+                            src:#ground;
+                            repeat:150 150;
+                            roughness:10;"
+                    rotation="-90 0 0"
+                    position="60 0 60"
+                    scale="300 300 1">
+                </a-plane> 
+
+                <a-plane material="color:#a2a2a2;
+                    src:#street;
+                    repeat:150 15;
+                    roughness:10;" rotation="-90 0 120" position="52 0.1 90" scale="300 30 1" geometry="">
+                </a-plane>
+            </a-entity>
+        </a-scene>
+
+
+        <div class="arrowcont">
+            <div class="relcontarrow">
+                <img src="arrow.png" alt="">
+                <span class="arrowc" id="staticc"></span>
+                <span ontouchmove="myFunction1(event)" class="arrowc hiddenarow" draggable="true" id="left"></span>
+            </div>
+        </div>
+
+        <div class="arrowcont right">
+            <div class="relcontarrow">
+                <img src="arrow.png" alt="">
+                <span class="arrowc" id="staticc1"> </span>
+                <span ontouchmove="myFunction1(event)" class="arrowc hiddenarow1" draggable="true" id="right"></span>
+            </div>
+        </div>
+
+        <div id="mobilecont" class="start">
+            full screen
+        </div>
+
+        <div class="popcont" id="infocont">
+            <div class="popupone">
+                <span class="close">x</span>
+                <span class="show"> this popup has all books name with it's address ==> example: library (A), second row, first section, third book   </span>
+            </div>  
+        </div>
+
+        <div class="popcont" id="tvcont">
+            <div class="popupone">
+                <span class="close">x</span>
+                <div class="show">
+                    <span class="play" >continue video</span>
+                    <ol>
+                        <li vlink="1.mp4">video1</li>
+                        <li vlink="2.mp4">video2</li>
+                        <li vlink="1.mp4">video3</li>
+                        <li vlink="1.mp4">video4</li>
+                        <li vlink="2.mp4">video5</li>
+                        <li vlink="1.mp4">video6</li>
+                        <li vlink="1.mp4">video7</li>
+                        <li vlink="2.mp4">video8</li>
+                        <li vlink="1.mp4">video9</li>
+                        <li vlink="1.mp4">video10</li>
+                        <li vlink="2.mp4">video11</li>
+                        <li vlink="1.mp4">video12</li>
+                        <li vlink="1.mp4">video13</li>
+                    </ol>
+                </div>
+            </div>  
+        </div>
+
+        <div class="popcont" id="dragedpop">
+            <div class="popupone">
+                <span class="close">x</span>
+                <div class="show">
+                    <p class="bookname"></p>
+                    <p class="shortstroy"></p>
+                    <p class="tablepdf"></p>
+                    <span class="tableadd">
+                        add to table
+                    </span>
+                </div>
+            </div>  
+        </div>
+
+        <div class="popcont" id="pdfimpeded">
+            <div class="popupone">
+                <span class="close">x</span>
+                <iframe id="pdf" src="" width="100%" height="600px" >
+
+                </iframe>
+            </div>  
+        </div>
+
+        <span class="gamecount">0</span>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="script/mainscript.js"></script>
+
+        <script>
+
+/***************************      interactions       ********************************/
+
+let openpop = ((pop)=>{
+    $("#thecamo").attr("wasd-controls","acceleration: 0;")
+    $(pop).css("display","flex")
+    document.exitPointerLock();
+})
+
+let closepop = ((pop)=>{
+    $(pop).css("display","none")
+    $("#thecamo").attr("wasd-controls","acceleration: 250;")
+
+    var canvas = $("canvas").get()[0];
+        canvas.requestPointerLock = canvas.requestPointerLock ||
+        canvas.mozRequestPointerLock ||
+        canvas.webkitRequestPointerLock;
+        canvas.requestPointerLock();
+})
+
+//***********************  library info  **********************************/
+
+$("#info").mousedown(function(){
+    openpop("#infocont");
+})
+
+$("#infocont .close").mousedown(function(){
+    closepop("#infocont");
+})
+
+/********************************         library creation        *************************************************/
+
+var librarys = [// library
+    [// rows
+        [// sections
+            [// books
+                {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                        {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+        ],
+        [// sections
+            [// books
+            {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                        {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                        {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                        {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+        ],
+        [// sections
+            [// books
+            {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                        {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                        {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ]
+        ]
+    ],
+    [// rows
+        [// sections
+            [// books
+            {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                        {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+        ],
+        [// sections
+            [// books
+            {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                        {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                        {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                        {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+        ],
+        [// sections
+            [// books
+            {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                        {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                        {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                        {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ]
+        ]
+    ],
+    [// rows
+        [// sections
+            [// books
+            {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                    {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+        ],
+        [// sections
+            [// books
+            {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                        {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                        {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                        {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+        ],
+        [// sections
+            [// books
+            {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },                {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },                {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },                {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },                {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },                {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                        {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+            {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+             {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ],
+            [// books
+                {
+                    id:1,
+                    name:"book1",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"red",                        
+                },
+                {
+                    id:2,
+                    name:"book2",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"orange",                        
+                },
+                {
+                    id:3,
+                    name:"book3",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"gray",                        
+                },
+                {
+                    id:4,
+                    name:"book4",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"green",                        
+                },
+                {
+                    id:5,
+                    name:"book5",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"blue",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                },                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                },                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                },                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                },
+                {
+                    id:6,
+                    name:"book6",
+                    shortStory:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis, explicabo? Perferendis praesentium eum dignissimos dolorem? Ab recusandae accusantium similique, itaque reiciendis quos nostrum libero illo dolorum commodi voluptate consequatur ex!",
+                    pdfLink:"1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd",
+                    color:"yellow",                        
+                }
+            ]
+        ]
+    ]
+]
+
+// this array of each library
+var rows_max_books=[];
+var number_of_rows=[];
+var rows_max_sections=[];
+
+// get library width function
+var booknumber=0;
+var rowsbooks=[];
+librarys.map((library, index)=>{
+    // get height function
+    number_of_rows.push(library.length)
+    rowsbooks=[];
+    section_numbers_array=[];
+
+    library.map((row)=>{
+        
+        booknumber=0;
+        row.map((section)=>{
+            booknumber+=section.length
+        })
+
+        rowsbooks.push(booknumber)
+        section_numbers_array.push(row.length)
+
+    })
+    rows_max_books.push(Math.max(...rowsbooks))
+    rows_max_sections.push(Math.max(...section_numbers_array))
+})
+
+
+// static variables
+
+var book_depth=0.1,
+    book_height=0.8,
+    book_width=1,
+    library_color=["#4d2900","#4d2900","#4d2900"],
+    library_position=["-12.4 2 7.72722", "12.4 2 7.72722", "0 2 13.9"],
+    library_rotation=["", "0 180 0", "0 90 0"];
+
+// get book color
+
+var book_color_arr = ["red", "blue", "green", "yellow"];
+
+//  get section width
+
+var vertical_gap = 0.2;
+var horizontal_gap = 0.5;
+var section_height = book_height + (vertical_gap / 2)
+
+
+var librarystring = '';
+function create_libraries(){
+    librarys.map((library, index)=>{
+
+        let rows_number = number_of_rows[index];
+        var library_depth = (rows_max_books[index] * book_depth)+ ((rows_max_sections[index]) * horizontal_gap + horizontal_gap);
+        var library_height = ((rows_number + 1) * vertical_gap) + (rows_number * section_height);
+
+        librarystring += '<a-box class="library" color="'+ library_color[index]+'" width="' + 0.01 + '" depth="' + library_depth + '" side="double" material="color: #4d2900" position="' + library_position[index] + '" rotation="' + library_rotation[index] + '" scale="" height="' + library_height + '">';
+
+        library.map((row, row_index)=>{
+            let position = book_width / 2 + " " + ((-library_height/2) + ((book_height + (vertical_gap*1.5)) * row_index)+(vertical_gap/2))  + " 0" 
+            librarystring += '<a-box class="row" color="'+ library_color[index]+'" width="' + book_width + '" depth="' + library_depth + '" side="double" material="color: #4d2900" position="' + position + '"  height="' + vertical_gap + '"></a-box>';
+
+            row.map((section, section_index)=>{
+                
+                let depth = section.length * book_depth;
+                let height = book_height + (horizontal_gap / 2);
+                let section_width = section.length * book_depth
+
+                if(section_index == 0){
+                    var position_z =  -1 *  (( library_depth / 2) - horizontal_gap - (section_width / 2));
+                }else{
+                    let position_array = row[section_index-1].position.split(" ");
+                    let prev_position_z = position_array[position_array.length - 1];
+                    var position_z = parseFloat(prev_position_z) + horizontal_gap + (row[section_index - 1].length * book_depth / 2) + (section_width / 2) 
+                }
+                
+                let position_y = (library_height/2) - vertical_gap - (section_height / 2) - (row_index * (section_height + vertical_gap)) 
+                let position = "0 " + position_y + " " + position_z;
+                section.position = position;
+                librarystring += '<a-box class="section" width="'+ 0.01 + '" height="'+ height + '" depth="'+ depth + '" side="double" position="'+ position + '"opacity="0">'                    
+                
+                section.map((book, book_index)=>{
+                    let position = (book_width / 2).toString() + " " + -1 * ((section_height / 2) - (book_height / 2) ) + " " + (-1 * ((section_width / 2) - (book_depth / 2)) + (book_index * book_depth)) ;
+                    let color = book_color_arr[Math.floor(Math.random() * book_color_arr.length)]
+                    librarystring += '<a-box class="book" width="'+ book_width +'" height="'+ book_height +'" depth="' + book_depth + '" side="double" color="'+ color +'"position="'+ position +'" bookname="' + book.name + '" booklink="' + book.pdfLink + '" bookstory="' + book.shortStory + '"></a-box>';
+                })
+                librarystring += '</a-box>';
+            })
+
+        })
+        librarystring += '</a-box>';
+    })
+
+    $("#libraryContainer").append(librarystring)
+    }create_libraries()
+
+    // close book details
+    $(document).on("click","#dragedpop .close",function(){
+        closepop("#dragedpop");
+        setTimeout(() => {
+            $(".draged_book").attr("position").x = book_width / 2;
+            $(".draged_book").removeClass("draged_book")
+        }, 200);
+    })
+
+    // show book details
+    $(document).on("click",".book",function(){
+        $(this).attr("position").x = book_width / 1.3;
+        $(this).addClass("draged_book");
+
+        $(".bookname").text($(".draged_book").attr("bookname"));
+        $(".shortstroy").text($(".draged_book").attr("bookstory"));
+        $(".tablepdf").text($(".draged_book").attr("booklink"));
+
+        setTimeout(() => {
+            openpop("#dragedpop");
+        }, 200);
+    })
+
+    // add book to the table
+    $(document).on("click",".tableadd",function(){
+        $("#thecamo").attr("camera","active:false");
+        $("#thecamo2").attr("camera","active:true");
+
+        $("#tablebook").attr("position","-0.06736 1.31917 3.44606")
+        $("#tablebook").attr("pdflink",$(".draged_book").attr("booklink"))
+
+        $("#dragedpop .close").trigger("click");
+
+        setTimeout(() => {
+            $("#thecamo2").attr("camera","active:false");
+            $("#thecamo").attr("camera","active:true");
+            var canvas = $("canvas").get()[0];
+            canvas.requestPointerLock = canvas.requestPointerLock ||
+            canvas.mozRequestPointerLock ||
+            canvas.webkitRequestPointerLock;
+            canvas.requestPointerLock();
+        }, 1000);
+    })
+
+    /**********************************  add pdf  *****************\
+     * 
+     * <iframe src="https://docs.google.com/viewer?url=https://www.antennahouse.com/XSLsample/pdf/sample-link_1.pdf&embedded=true" style="width:600px; height:500px;" frameborder="0"></iframe>
+
+    */
+
+    $(document).on("click","#tablebook",function(){
+        //$("#pdf").attr("src","1G5lsqM161wPEwder-y7pbY-IN7jEc0Wd/"+"preview")//#toolbar=0&page=1&zoom=100
+        $("#pdf").attr("src","https://drive.google.com/file/d/"+$(".tablepdf").text()+"/preview")//#toolbar=0&page=1&zoom=100
+
+        openpop("#pdfimpeded");
+    })
+
+    $(document).on("click","#pdfimpeded .close",function(){
+        closepop("#pdfimpeded");
+    })
+    
+    /****************   cenima functions interactive  ********************/
+
+    $(document).on("click","#tv",function(){
+        document.querySelector("#myvideo").pause();
+        openpop("#tvcont");
+    })
+
+    $(document).on("click","#tvcont .close",function(){
+        closepop("#tvcont");
+    })
+
+    $(document).on("click","#tvcont li",function(){
+       $("#myvideo").attr("src",$(this).attr("vlink"));
+       closepop("#tvcont");
+       document.querySelector("#myvideo").play();
+    })
+
+    $(document).on("click","#tvcont .play",function(){
+       closepop("#tvcont");
+       document.querySelector("#myvideo").play();
+    })
+
+
+/********************************  landscapeMode and desktopMode  ******************************************/
+var mobilemodeangle = 360;
+var one = 0;
+var mobileMode = "portrait";
+setInterval(intervallocation, 16);
+
+if ($(window).width() < 900 && $(window).width() > $(window).height()){
+    mobileMode = "landscape"
+}
+
+function portraitmode(){
+    $("#mobilecont").css({"display":"flex","pointer-events":"none"});
+    $("#mobilecont").html("rotate your phone");
+}
+
+function landscapemode(){
+    $("#cursor").attr("geometry","primitive:sphere; radius:0.0001")
+    $("#cursor").attr("cursor","rayOrigin: mouse")
+    $("#mobilecont").css({"display":"flex","pointer-events":"unset"});
+    $(".arrowcont").show();
+    $("#mobilecont").html("fullscreen");
+}
+
+if ($(window).width() < 900 && $(window).width() > $(window).height()){
+    landscapemode()
+
+}else if($(window).width() < 600  && $(window).width() < $(window).height()){
+    portraitmode()
+}
+
+$( window ).resize(function() {
+    if ($(window).width() < 900  && $(window).width() > $(window).height()){
+        landscapemode()
+    }else if($(window).width() < 600  && $(window).width() < $(window).height()){
+        portraitmode()
+    }else{
+        $("#mobilecont, .arrowcont").hide()
+    }
+})
+
+$("#mobilecont").mousedown(function(){
+    mobilefull()
+    $("#mobilecont").hide()
+    if(one == 0){
+        rungame();
+        one++
+    }
+})
+
+function rungame(){
+    setInterval(keepmoving, 70);
+    if (mobileMode == "landscape"){
+        mobilemodeangle = 360 - 116.565;
+        document.querySelector("#thecamo").components['look-controls'].yawObject.rotation.y = -90;   
+    }
+}
+
+/******************************** cam movment ********************/
+function camAnimate(point_coord){
+    var thedistance_x = point_coord.split(" ")[0]-($("#thecamo").attr("position").x);
+    var thedistance_y = point_coord.split(" ")[2]-($("#thecamo").attr("position").z);
+    var thedistance_z = ((thedistance_y ** 2) + (thedistance_x ** 2)) ** 0.5;
+    var duration = (thedistance_z * 100) / 1;
+    var newanimation = "property:position; loop:1; easing:linear; dur:" + duration + "; to:" + point_coord.split(" ")[0] + " 1.6 " + point_coord.split(" ")[2];
+    $("#thecamo").attr("animation", newanimation)
+    return duration;
+}
+
+/**********************************             door funtions                **************************************/
+//$("#thecamo").attr("position","-1 1.6 -6.23")
+//document.querySelector("#thecamo").components['look-controls'].yawObject.rotation.y 
+
+var pointCoord = [["-1 1.6 -6.23", "0.5 1.6 -17.26"],["-1 1.6 -31.23", "0.5 1.6 -42.26"]];
+var doorAnimation = [["-3.5 -2 -2.5", "-1 -2 0"],["-3.5 -2 -27.5", "-1 -2 -25;"]];
+var pointangleY = [0, 15.7];
+var xDirection = "";
+var zDirection = "";
+var rotationDirection = "";
+var currentRoom = 1;
+
+$("[class^='door']").mousedown(function(){
+    thedistance_x = $(this).attr("position").x - ($("#thecamo").attr("position").x)
+    thedistance_y = $(this).attr("position").z - 11 - ($("#thecamo").attr("position").z) 
+    dangerous = ((thedistance_x ** 2 ) + (thedistance_y ** 2) ** 0.5)
+    if((dangerous < 8 && dangerous > -8)){
+        var doorClassName = $(this).attr("class");
+        openDoor(doorClassName.slice(-1),doorClassName)
+    }
+})
+
+function openDoor(pointindex, classname){
+    if(currentRoom == 1){
+        currentRoom -= 1;
+        areas[pointindex].type = "gateopen"
+        
+        var dooranimation = "property:position; loop:1; easing:linear; dur:" + 100 + "; to:"+ doorAnimation[pointindex][0]+";";
+        var dooranimation2 = "property:rotation; loop:1; easing:linear; dur:" + 100 + "; to: 0 90 0";
+        $("."+classname).attr("animation", dooranimation)
+        $("."+classname).attr("animation__2", dooranimation2)
+        var duration = camAnimate(pointCoord[pointindex][currentRoom]);
+
+        setTimeout(()=>{
+            var newanimation = "property:position; loop:1; easing:linear; dur:" + 2000 + "; to:" + pointCoord[pointindex][currentRoom+1].split(" ")[0] + " 1.6 " + pointCoord[pointindex][currentRoom+1].split(" ")[2];
+            $("#thecamo").attr("animation", newanimation)
+            setTimeout(()=>{
+                var dooranimation = "property:position; loop:1; easing:linear; dur:" + 100 + "; to:"+ doorAnimation[pointindex][1]+";";
+                var dooranimation2 = "property:rotation; loop:1; easing:linear; dur:" + 100 + "; to: 0 0 0";
+                $("."+classname).attr("animation", dooranimation)
+                $("."+classname).attr("animation__2", dooranimation2)
+                currentRoom = 1;
+                pointCoord[pointindex].reverse()
+                areas[pointindex].type = "gateclosed"
+            },2000)
+        },duration)
+    }
+}
+
+
+/******************************** car *******************************/
+var car = false;
+var moving_amount = 0.4;
+
+var items = [[-60,-10],[-75,0],[-95,10],[-110,-10],[-130,0]];
+$("#thecar").click(function(){
+    car = true;
+    moving_amount = 2
+    if(currentRoom == 1){
+        currentRoom -= 1;
+        let duration = camAnimate("5 .7 -50")
+        $(".gamecount").show();
+        setTimeout(() => {
+            if($("#thecamo").attr("rotation").y > 1){
+               if($("#thecamo").attr("rotation").y%360 > 180){
+                var rotation = $("#thecamo").attr("rotation").y +360- $("#thecamo").attr("rotation").y%360
+               }else{
+                var rotation = $("#thecamo").attr("rotation").y - $("#thecamo").attr("rotation").y%360
+               }
+            }else{
+                if($("#thecamo").attr("rotation").y%360 < -180){
+                var rotation = $("#thecamo").attr("rotation").y -360- $("#thecamo").attr("rotation").y%360
+               }else{
+                var rotation = $("#thecamo").attr("rotation").y - $("#thecamo").attr("rotation").y%360
+               }
+            }
+
+            $("#thecamo").attr("animation", "property:rotation; loop:1;  dur:" + 500 + ";to: 0 "+ rotation +" 0;")
+            $("#thecamo").attr("wasd-controls","acceleration: 0;")
+            setTimeout(() => {
+                $("#thecar").remove();
+                $("#thecamo").append('<a-box id="thecar" color="blue" width="2" height="1" depth="4" side="double" material="shader:standard;" position="0 -0.8 0" rotation="0 0 0" scale="1 1 1" geometry=""></a-box>');
+                $("#thecamo").attr("wasd-controls","acceleration: 2000;")
+                $("#thecamo").attr("wasd-controls","wsAxis: 0;")
+                $("#scene, .arrowcont.right").css({"cursor":"none","pointer-events":"none"});
+                document.exitPointerLock();
+                if (mobileMode == "landscape"){
+                    document.querySelector("#thecamo").components['look-controls'].yawObject.rotation.y = -90;   
+                }else{
+                    document.querySelector("#thecamo").components['look-controls'].yawObject.rotation.y = 0;
+                }
+                document.querySelector("#thecamo").components['look-controls'].pitchObject.rotation.x = 0;
+                var carmoving = setInterval(() => {
+                    $("#thecamo").attr("position").z -=0.8
+                    if(items.length > 0){
+                        if($("#thecamo").attr("position").z - 2 < items[0][0]){
+                            if($("#thecamo").attr("position").x + 3 > items[0][1] &&  $("#thecamo").attr("position").x - 3 < items[0][1]){
+                                $(".gamecount").text(parseInt($(".gamecount").text())+1)
+                            }
+                            items.shift()
+                        }
+                    }
+                    if($("#thecamo").attr("position").z < -130){
+                        alert("thank you");
+                        clearInterval(carmoving)
+                        moving_amount = 0;
+                        $("#thecamo").attr("wasd-controls","acceleration: 0;")
+                    }
+                }, 50);
+                currentRoom = 1;
+            }, 500);
+        }, duration);
+    }
+})
+
+/************************   full screen mobile   ***********************/
+
+function mobilefull(){
+    function fullscreen() {
+        if (!document.fullscreenElement &&    // alternative standard method
+            !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {  // current working methods
+            if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+            } else if (document.documentElement.msRequestFullscreen) {
+            document.documentElement.msRequestFullscreen();
+            } else if (document.documentElement.mozRequestFullScreen) {
+            document.documentElement.mozRequestFullScreen();
+            } else if (document.documentElement.webkitRequestFullscreen) {
+            document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+            }
+        // } else {
+        //     if (document.exitFullscreen) {
+        //     document.exitFullscreen();
+        //     } else if (document.msExitFullscreen) {
+        //     document.msExitFullscreen();
+        //     } else if (document.mozCancelFullScreen) {
+        //     document.mozCancelFullScreen();
+        //     } else if (document.webkitExitFullscreen) {
+        //     document.webkitExitFullscreen();
+        //     }
+        }
+    }
+    fullscreen() 
+}
+
+/************************    moving function   ****************************/
+
+function moving(centerx, centery, hiddenx, hiddeny, value){
+    var cam=$("#thecamo").attr("position")
+
+    if (centerx > hiddenx + 10) {
+    dirX = -value
+    } else if (centerx < hiddenx - 10) {
+    dirX = value
+    } else {
+    dirX = 0
+    }
+
+    if (centery > hiddeny + 10) {
+    dirY = -value
+    } else if (centery < hiddeny - 10) {
+    dirY = value
+    } else {
+    dirY = 0
+    }
+
+    if(value == moving_amount){
+        var x1 = cam.x + dirX,
+            y1 = cam.z + dirY,
+            angle = mobilemodeangle - ((document.querySelector("#thecamo").components['look-controls'].yawObject.rotation.y*(360/6.285)) % 360); 
+            x2 = ((x1-cam.x) * (Math.cos(angle * (Math.PI / 180)))) - ((y1-cam.z)* (Math.sin(angle * (Math.PI / 180)))) + cam.x,
+            y2 = ((x1-cam.x) * (Math.sin(angle * (Math.PI / 180)))) + ((y1-cam.z) * (Math.cos(angle * (Math.PI / 180)))) + cam.z;
+
+            if(car == true){
+                $("#thecamo").attr("position",x2 + " 1.6 " + $("#thecamo").attr("position").z);
+            }else{
+                $("#thecamo").attr("position",x2 + " 1.6 " + y2);
+            }
+    }else{
+        document.querySelector("#thecamo").components['look-controls'].yawObject.rotation.y += dirX*-1;
+        document.querySelector("#thecamo").components['look-controls'].pitchObject.rotation.x += dirY*-1;
+    }
+}
+
+
+function keepmoving(){
+    var $this2 = $("#staticc");
+        centerX2 = $this2.offset().left + $this2.width() / 2,
+        centerY2 = $this2.offset().top + $this2.height() / 2,
+
+        $this3 = $("#staticc1");
+        centerX3 = $this3.offset().left + $this3.width() / 2,
+        centerY3 = $this3.offset().top + $this3.height() / 2,
+
+        $this = $(".hiddenarow");
+        centerX = $this.offset().left + $this.width() / 2,
+        centerY = $this.offset().top + $this.height() / 2,
+
+        $this4 = $(".hiddenarow1");
+        centerX4 = $this4.offset().left + $this4.width() / 2,
+        centerY4 = $this4.offset().top + $this4.height() / 2;
+
+    moving(centerX2, centerY2, centerX, centerY, moving_amount)
+    moving(centerX3, centerY3, centerX4, centerY4, 0.1);
+};
+
+
+/***************************** touch **********************************/
+
+$(document).on("touchend",".hiddenarow1, .hiddenarow", function(e) {
+    $(this).css({"left":"50%","top":"50%"})
+});
+
+function myFunction1(e) {
+    let elementid = e.srcElement.id;
+    let $this211 = $("#"+elementid).parent();
+    let width211 = $this211.width();
+    let height211 = $this211.height();
+    let theleft11 = e.touches[0].clientX - ($this211.offset().left + $this211.width()/2)
+    let thetop11 = e.touches[0].clientY - ($this211.offset().top + $this211.height()/2)
+
+    if(theleft11 > width211/2 ){
+        theleft11 = width211/2
+    }else if(theleft11 < -width211/2){
+        theleft11 =  -width211/2
+    }
+
+    if(thetop11 > height211/2 ){
+        thetop11 = height211/2
+    }else if(thetop11 < -height211/2){
+        thetop11 =  -height211/2
+    }
+    $("#"+elementid).css({"left":theleft11 + $this211.width()/2 ,"top":thetop11 + $this211.width()/2 })
+}
+
+/*************************    areas   ******************************/
+// importaaaaaaaaaaaaaaaaaaaaaaaaaaant make sure that first items is all door 
+var areas = [
+            {
+                type:"gateclosed",
+                neighbour:[0,2,3],
+                forward:{
+                    distance: 14,
+                    ispositive: -1
+                },
+                backword:{
+                    distance: 7,
+                    ispositive: -1
+                },
+                right:{
+                    distance: 1,
+                    ispositive: 1
+                },
+                left:{
+                    distance: 3,
+                    ispositive: -1
+                }
+            },
+            {
+                type:"gateclosed",
+                neighbour:[1,3,4],
+                forward:{
+                    distance: 39,
+                    ispositive: -1
+                },
+                backword:{
+                    distance: 33,
+                    ispositive: -1
+                },
+                right:{
+                    distance: 1,
+                    ispositive: 1
+                },
+                left:{
+                    distance: 3,
+                    ispositive: -1
+                }
+            },
+            {
+                type:"area1",
+                neighbour:[2,0],
+                forward:{
+                    distance: 8,
+                    ispositive: -1
+                },
+                backword:{
+                    distance: 11.5,
+                    ispositive: 1
+                },
+                right:{
+                    distance: 10,
+                    ispositive: 1
+                },
+                left:{
+                    distance: 10,
+                    ispositive: -1
+                }
+            },
+            {
+             type:"area2",
+             neighbour:[3,0,1],
+             forward:{
+                    distance: 34,
+                    ispositive: -1
+                },
+                backword:{
+                    distance: 13,
+                    ispositive: -1
+                },
+                right:{
+                    distance: 10,
+                    ispositive: 1
+                },
+                left:{
+                    distance: 10,
+                    ispositive: -1
+                }
+            },
+            {
+             type:"area3",
+             neighbour:[4,1],
+             forward:{
+                    distance: 170,
+                    ispositive: -1
+                },
+                backword:{
+                    distance: 38,
+                    ispositive: -1
+                },
+                right:{
+                    distance: 15,
+                    ispositive: 1
+                },
+                left:{
+                    distance: 15,
+                    ispositive: -1
+                }
+            }
+        ]
+
+        var x_valid = 0;
+        var z_valid = 0;
+
+        var neighbour_areas=[areas[0],areas[2]];
+
+        var setaears = (currentarea)=>{
+            neighbour_areas=[];
+            areas[currentarea].neighbour.map((areaindex)=>{
+                if(areas[areaindex].type != "gateclosed"){
+                    neighbour_areas.push(areas[areaindex])
+                }
+            })
+        }
+
+
+        function intervallocation(){
+            var z_dist = $("#thecamo").attr("position").z;
+            var x_dist = $("#thecamo").attr("position").x;
+
+            for (i = 0; i < neighbour_areas.length; i++){
+
+                if(z_dist > (neighbour_areas[i].forward.distance * neighbour_areas[i].forward.ispositive) && z_dist < (neighbour_areas[i].backword.distance * neighbour_areas[i].backword.ispositive) && x_dist > (neighbour_areas[i].left.distance * neighbour_areas[i].left.ispositive) && x_dist < (neighbour_areas[i].right.distance * neighbour_areas[i].right.ispositive)){
+                    x_valid = x_dist;
+                    z_valid = z_dist;
+                    setaears(neighbour_areas[i].neighbour[0])
+                    break;
+
+                }else{
+                    if(i == neighbour_areas.length -1){
+                        if($("#thecamo").attr("position").z > 0){
+                            $("#thecamo").attr("position").z = z_valid 
+                        }else{
+                            $("#thecamo").attr("position").z = z_valid
+                        }
+                        if($("#thecamo").attr("position").x > 0){
+                            $("#thecamo").attr("position").x = x_valid
+                        }else{
+                            $("#thecamo").attr("position").x = x_valid
+                        }
+                    }
+                }
+            }
+        };
+        
+        </script>
+    </body>
+</html>
