@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>gun or run</title>
+        <meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="mobile-web-app-capable" content="yes">
+        <script src="https://res.cloudinary.com/threejs/raw/upload/v1616269303/main3d1.0.0_sguzcj.js"></script>
+        <script src="https://res.cloudinary.com/threejs/raw/upload/v1616270458/3djs_V55_hoeow1.js"></script>
+
+        <style>
+span.close {
+    color: white;
+    font-size: 20px;
+    font-family: arial;
+    font-weight: 900;
+    display: inline-block;
+    margin-left: auto;
+    padding-right: 7px;
+    border-radius: 5px;
+    border: 1px solid;
+    padding-left: 6px;
+    padding-bottom: 1px;
+    cursor: pointer;
+}
+
+button.a-enter-vr-button{
+    display: none;
+}
+
+.popupone {
+    height: 70vh;
+    width: 60vw;
+    background: #383838e8;
+    border-radius: 14px;
+    padding: 10px;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+}
+
+.popcont {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    z-index: 100000000;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+span.show {
+    text-align: center;
+    color: white;
+    position: absolute;
+    top: 50%;
+    transform: translatey(-50%);
+    font-size: 3vw;
+    max-width: 35%;
+}
+
+
+.arrowcont img {
+    width: 100%;
+    height: 100%;
+}
+
+.arrowcont {
+    position: absolute;
+    z-index: 1000;
+    width: 30vh;
+    left: 50px;
+    bottom: 50px;
+    height: 30vh;
+    display: none;
+}
+
+.a-modal{
+    display: none;
+}
+
+
+/**************************/
+
+.arrowcont.right {
+    right: 50px;
+    left: unset;
+}
+
+span.arrowc {
+    position: absolute;
+    background: black;
+    height:50%;
+    width: 50%;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -53%);
+}
+
+span.arrowc.hiddenarow, span.arrowc.hiddenarow1{
+    z-index: 10;
+    background: yellowgreen;
+}
+
+
+div#mobilecont {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background: beige;
+    top: 0;
+    z-index: 100000000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 5vw;
+}
+
+</style>
+    </head>
+
+    <body>
+        <a-scene id="scene">
+
+            <a-assets>
+                <a-asset-item id="enviroment" src="models/discovery_hall/scene.gltf"></a-asset-item> 
+                <video id="myvideo" loop="true"  src="media/1.mp4"></video>
+            </a-assets>
+
+            </a-entity movement-controls="speed: 0.15" >
+                <a-entity position="0 0 0" rotation="0 0 0" id="thecam">
+                    <a-entity camera look-controls = "pointerLockEnabled:true" id="thecamo" wasd-controls="acceleration: 150;" position="0 1.6 0">
+                        <a-entity id="cursor" cursor="click:true;" position="0 0 -2" geometry="primitive:sphere; radius:0.02" material="color: red; shader:flat; opacity:0.5"
+                        raycaster="object: .dinosaurmodel"></a-entity>
+
+                    </a-entity>
+                </a-entity>  
+            </a-entity>
+            <a-entity cursor-listener scale="1 1 1" position="0 0 0" rotation="0 0 0" gltf-model="#enviroment">
+                <a-box opacity="0" position="11.82 3.1 -7.42" class="yellowbox2" material="" geometry="" width="5" height="3.2" depth="0.01"></a-box>
+                <a-video  position="0.1 3.1 -7.42" id="yellowbox" material="" geometry="" width="6.2" height="4" src= "#myvideo"></a-video>
+                <a-box opacity="0" position="-11.82 3.1 -7.42" class="yellowbox2" material="" geometry="" width="5" height="3.2" depth="0.01"></a-box>
+            </a-entity>
+        </a-scene>
+
+        <div class="popcont">
+            <div class="popupone">
+                <span class="close">x</span>
+                <span class="show"> Show what you need now Environment is frozen</span>
+            </div>  
+        </div>
+
+        <div class="arrowcont">
+            <div class="relcontarrow">
+                <img src="media/arrow.png" alt="">
+                <span class="arrowc" id="staticc"></span>
+                <span ontouchmove="myFunction1(event)" class="arrowc hiddenarow" draggable="true" id="left"></span>
+            </div>
+        </div>
+
+        <div class="arrowcont right">
+            <div class="relcontarrow">
+                <img src="media/arrow.png" alt="">
+                <span class="arrowc" id="staticc1"> </span>
+                <span ontouchmove="myFunction1(event)" class="arrowc hiddenarow1" draggable="true" id="right"></span>
+            </div>
+        </div>
+
+        <div id="mobilecont">
+            full screen
+        </div>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
+
+
+<script>
+/********************************  landscapeMode and desktopMode  ******************************************/
+
+function portraitmode(){
+    $("#mobilecont").css({"display":"flex","pointer-events":"none"});
+    $("#mobilecont").html("rotate your phone");
+}
+
+function landscapemode(){
+    $("#cursor").attr("geometry","primitive:sphere; radius:0.0001")
+    $("#cursor").attr("cursor","rayOrigin: mouse")
+    $(".arrowcont").show();
+    $("#mobilecont").html("fullscreen");
+    $("#mobilecont").css({"pointer-events":"unset"});
+}
+
+if ($(window).width() < 900 && $(window).width() > $(window).height()){
+    landscapemode()
+    $("#mobilecont").css({"display":"flex"});
+}else if($(window).width() < 600  && $(window).width() < $(window).height()){
+    portraitmode()
+}
+
+$( window ).resize(function() {
+    if ($(window).width() < 900  && $(window).width() > $(window).height()){
+        landscapemode()
+    }else if($(window).width() < 600  && $(window).width() < $(window).height()){
+        portraitmode()
+    }else{
+        $("#mobilecont, .arrowcont").hide()
+    }
+})
+
+$("#mobilecont").mousedown(function(){
+    mobilefull()
+    document.querySelector("#thecamo").components['look-controls'].yawObject.rotation.y=0.05
+})
+
+
+function mobilefull(){
+    function fullscreen() {
+        if (!document.fullscreenElement &&    
+            !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {  // current working methods
+            if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+            } else if (document.documentElement.msRequestFullscreen) {
+            document.documentElement.msRequestFullscreen();
+            } else if (document.documentElement.mozRequestFullScreen) {
+            document.documentElement.mozRequestFullScreen();
+            } else if (document.documentElement.webkitRequestFullscreen) {
+            document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+            }
+        }
+    }
+    fullscreen() 
+    $("#mobilecont").hide()
+}
+
+
+/***************************      interactions       ********************************/
+
+
+$("#yellowbox").mousedown(function(){
+    
+    if (document.querySelector("#myvideo").paused == false) {
+        document.querySelector("#myvideo").pause();
+    } else {
+        document.querySelector("#myvideo").play();
+    }
+})
+
+$(".yellowbox2").mousedown(function(){
+    $("#thecamo").attr("wasd-controls","acceleration: 0;")
+    $(".popcont").css("display","flex")
+    document.exitPointerLock();
+})
+
+$(".close").mousedown(function(){
+    $(".popcont").css("display","none")
+    $("#thecamo").attr("wasd-controls","acceleration: 150;")
+
+    var canvas = $("canvas").get()[0];
+        canvas.requestPointerLock = canvas.requestPointerLock ||
+        canvas.mozRequestPointerLock ||
+        canvas.webkitRequestPointerLock;
+        canvas.requestPointerLock();
+})
+
+
+/*************************    areas     ******************************/
+
+        var areas = [
+            {
+                forward:{
+                    distance: 6,
+                    islimited: true,
+                    ispositive: -1
+                },
+                backword:{
+                    distance: 8,
+                    islimited: true,
+                    ispositive: 1
+                },
+                right:{
+                    distance: 16,
+                    islimited: true,
+                    ispositive: 1
+                },
+                left:{
+                    distance: 4.5,
+                    islimited: false,
+                    ispositive: 1
+                }
+            },
+            {
+                forward:{
+                    distance: 3.5,
+                    islimited: true,
+                    ispositive: -1
+                },
+                backword:{
+                    distance: 8,
+                    islimited: true,
+                    ispositive: 1
+                },
+                right:{
+                    distance: 4.5,
+                    islimited: false,
+                    ispositive: 1
+                },
+                left:{
+                    distance: 4.5,
+                    islimited: false,
+                    ispositive: -1
+                }
+            },
+            {
+                forward:{
+                    distance: 6,
+                    islimited: true,
+                    ispositive: -1
+                },
+                backword:{
+                    distance: 8,
+                    islimited: true,
+                    ispositive: 1
+                },
+                right:{
+                    distance: 4.5,
+                    islimited: false,
+                    ispositive: -1
+                },
+                left:{
+                    distance: 16,
+                    islimited: true,
+                    ispositive: -1
+                }
+            }
+        ]
+
+/*****************      prevent inspectz        ********************************/
+        /*document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        });
+
+        $(document).keydown(function(e){
+            if(e.which === 123){
+            return false;
+            }
+        });*/
+        </script>
+
+
+    </body>
+</html>
